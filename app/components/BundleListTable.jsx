@@ -1,36 +1,40 @@
+import React from 'react'
 import { browserHistory } from 'react-router';
+import InfoPanel from 'InfoPanel'
+import Loader from 'Loader'
+import NumOfItems from 'NumOfItems'
 
-BundleListTable = React.createClass({
+const BundleListTable = React.createClass({
   getInitialState() {
     return {
       isLoaded: false,
       isSamplesLoaded: false,
       error: false
-    };
+    }
   },
 
   componentWillMount() {
-    this.loadBundles(this.props.params.restaurantId);
+    this.loadBundles(this.props.params.restaurantId)
   },
 
   componentWillUpdate(nextProps) {
     if (nextProps.params.restaurantId != this.props.params.restaurantId) {
-      this.loadBundles(nextProps.params.restaurantId);
+      this.loadBundles(nextProps.params.restaurantId)
     }
 
     if (nextProps.params.bundleId && nextProps.params.bundleId != this.props.params.bundleId) {
       this.setState({
         isSamplesLoaded: false
-      });
+      })
     }
   },
 
   loadBundles(restaurantId) {
-    var self = this;
+    var self = this
 
     self.setState({
       isLoaded: false
-    });
+    })
 
     Meteor.call('getBundles', restaurantId, 0, 100, true, (err, result) => {
       if (!err && result.payload && result.numItems && result.restaurantName) {
@@ -40,17 +44,17 @@ BundleListTable = React.createClass({
           isLoaded: true,
           restaurantName: result.restaurantName,
           error: false
-        });
+        })
       } else {
         self.setState({
           error: true
-        });
+        })
       }
-    });
+    })
   },
 
   handleClickBundle(id) {
-    browserHistory.push(`/database/restaurant/${this.props.params.restaurantId}/bundle/${id}`);
+    browserHistory.push(`/database/restaurant/${this.props.params.restaurantId}/bundle/${id}`)
   },
 
   renderLoader(bundleId) {
@@ -63,14 +67,14 @@ BundleListTable = React.createClass({
             size={20}
           />
         </span>
-      );
+      )
     }
 
-    return null;
+    return null
   },
 
   renderBundles() {
-    var self = this;
+    var self = this
 
     return this.state.rows.map((row, idx) => {
       return (
@@ -95,14 +99,14 @@ BundleListTable = React.createClass({
           </div>
           {this.renderLoader(row.id)}
         </div>
-      );
-    });
+      )
+    })
   },
 
   handleOnLoadSamples() {
     this.setState({
       isSamplesLoaded: true
-    });
+    })
   },
 
   renderChildren() {
@@ -113,15 +117,15 @@ BundleListTable = React.createClass({
             onLoad: this.handleOnLoadSamples
           }
         )
-      );
+      )
     }
 
-    return null;
+    return null
   },
 
   render() {
     if (this.state.error) {
-      return <Error />;
+      return <Error />
     }
 
     return this.state.isLoaded ?
@@ -146,6 +150,8 @@ BundleListTable = React.createClass({
           {this.renderChildren()}
         </div>
       ) :
-      <Loader />;
+      <Loader />
   }
-});
+})
+
+export default BundleListTable

@@ -1,16 +1,18 @@
-import { browserHistory } from 'react-router';
+import React from 'react'
+import { browserHistory } from 'react-router'
 
-GoogleMapLoaded = false;
+let GoogleMapLoaded = false
+let map = null
 
 function fromLatLngToPoint(latLng, map) {
-  var topRight = map.getProjection().fromLatLngToPoint(map.getBounds().getNorthEast());
-  var bottomLeft = map.getProjection().fromLatLngToPoint(map.getBounds().getSouthWest());
-  var scale = Math.pow(2, map.getZoom());
-  var worldPoint = map.getProjection().fromLatLngToPoint(latLng);
-  return new google.maps.Point((worldPoint.x - bottomLeft.x) * scale, (worldPoint.y - topRight.y) * scale);
+  let topRight = map.getProjection().fromLatLngToPoint(map.getBounds().getNorthEast())
+  let bottomLeft = map.getProjection().fromLatLngToPoint(map.getBounds().getSouthWest())
+  let scale = Math.pow(2, map.getZoom())
+  let worldPoint = map.getProjection().fromLatLngToPoint(latLng)
+  return new google.maps.Point((worldPoint.x - bottomLeft.x) * scale, (worldPoint.y - topRight.y) * scale)
 }
 
-Map = React.createClass({
+const Map = React.createClass({
   propTypes: {
     restaurants: React.PropTypes.array.isRequired
   },
@@ -18,35 +20,35 @@ Map = React.createClass({
   getInitialState() {
     return {
       isMapReady: false
-    };
+    }
   },
 
   componentDidMount() {
     if (GoogleMapLoaded) {
-      this.handleScriptOnLoad();
+      this.handleScriptOnLoad()
     } else {
-      let scriptTag = document.createElement('script');
-      scriptTag.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCf9LEFx4-NkNFr-WnbVP-DnIVAndzSF04');
-      scriptTag.onload = this.handleScriptOnLoad;
-      GoogleMapLoaded = true;
+      let scriptTag = document.createElement('script')
+      scriptTag.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCf9LEFx4-NkNFr-WnbVP-DnIVAndzSF04')
+      scriptTag.onload = this.handleScriptOnLoad
+      GoogleMapLoaded = true
 
-      document.body.appendChild(scriptTag);
+      document.body.appendChild(scriptTag)
     }
   },
 
   handleMapCenterChanged() {
     if (this.state.isMapReady) {
       // Force update markers
-      this.setState({});
+      this.setState({})
     }
   },
 
   componentWillUnmount() {
-    google.maps.event.clearListeners(map, 'center_changed');
+    google.maps.event.clearListeners(map, 'center_changed')
   },
 
   handleScriptOnLoad() {
-    var self = this;
+    const self = this
 
     map = new google.maps.Map(document.getElementById('google-map'), {
       center: {lat: 36.363246, lng: 127.358279},
@@ -58,33 +60,33 @@ Map = React.createClass({
       draggable: true,
       disableDefaultUI: true,
       disableDoubleClickZoom: true
-    });
+    })
 
-    map.addListener('center_changed', self.handleMapCenterChanged);
+    map.addListener('center_changed', self.handleMapCenterChanged)
 
     google.maps.event.addListenerOnce(map, 'idle', () => {
       self.setState({
         isMapReady: true
-      });
-    });
+      })
+    })
   },
 
   handleOnSelectMarker(id) {
     if (this.props.restaurantId != id) {
-      browserHistory.push(`/database/restaurant/${id}`);
+      browserHistory.push(`/database/restaurant/${id}`)
     }
   },
 
   renderMarkers() {
     if (this.state.isMapReady) {
       return this.props.restaurants.map((row, idx) => {
-        let point = {x: 0, y: 0};
-        let hidden = true;
+        let point = {x: 0, y: 0}
+        let hidden = true
 
         if (row.latitude && row.longitude) {
-          let latLng = new google.maps.LatLng(row.latitude, row.longitude);
-          point = fromLatLngToPoint(latLng, map);
-          hidden = false;
+          let latLng = new google.maps.LatLng(row.latitude, row.longitude)
+          point = fromLatLngToPoint(latLng, map)
+          hidden = false
         }
 
         return (
@@ -98,8 +100,8 @@ Map = React.createClass({
             selected={this.props.restaurantId === row.id}
             onSelect={this.handleOnSelectMarker.bind(null, row.id)}
           />
-        );
-      });
+        )
+      })
     }
   },
 
@@ -116,9 +118,9 @@ Map = React.createClass({
         />
         {this.renderMarkers()}
       </div>
-    );
+    )
   }
-});
+})
 
 Map.Marker = React.createClass({
   propTypes: {
@@ -135,35 +137,35 @@ Map.Marker = React.createClass({
     return {
       hidden: false,
       selected: false
-    };
+    }
   },
 
   getInitialState() {
     return {
       hover: false
-    };
+    }
   },
 
   handleMouseEnter() {
     this.setState({
       hover: true
-    });
+    })
   },
 
   handleMouseLeave() {
     this.setState({
       hover: false
-    });
+    })
   },
 
   handleOnClick() {
     if (this.props.onSelect) {
-      this.props.onSelect();
+      this.props.onSelect()
     }
   },
 
   render() {
-    const size = this.state.hover ? 70 : 25;
+    const size = this.state.hover ? 70 : 25
     const style = {
       container: {
         left: `${this.props.x}px`,
@@ -178,7 +180,7 @@ Map.Marker = React.createClass({
         width: `${size}px`,
         height: `${size}px`
       }
-    };
+    }
 
     return (
       this.props.hidden ? null :
@@ -200,6 +202,8 @@ Map.Marker = React.createClass({
           </span>
         </div>
       </div>
-    );
+    )
   }
-});
+})
+
+export default Map

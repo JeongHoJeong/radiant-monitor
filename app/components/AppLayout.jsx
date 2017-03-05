@@ -1,29 +1,31 @@
-import { browserHistory } from 'react-router';
+import React from 'react'
+import { browserHistory } from 'react-router'
+import Header from 'Header'
 
-AppLayout = React.createClass({
+const AppLayout = React.createClass({
   getInitialState() {
     return {
       currentPath: window.location.pathname
-    };
+    }
   },
 
   componentWillMount() {
     this.pathChangeListener = browserHistory.listen((ev) => {
       this.setState({
         currentPath: ev.pathname
-      });
-    });
+      })
+    })
   },
 
   componentWillUnmount() {
     if (this.pathChangeListener) {
-      this.pathChangeListener.unlisten();
-      this.pathChangeListener = null;
+      this.pathChangeListener.unlisten()
+      this.pathChangeListener = null
     }
   },
 
   render() {
-    const isFullscreen = this.state.currentPath === '/';
+    const isFullscreen = this.state.currentPath === '/'
 
     return (
       <div
@@ -43,6 +45,8 @@ AppLayout = React.createClass({
           {this.props.children}
         </div>
       </div>
-    );
+    )
   }
-});
+})
+
+export default AppLayout

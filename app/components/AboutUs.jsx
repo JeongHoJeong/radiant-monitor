@@ -1,4 +1,6 @@
-AboutUs = React.createClass({
+import React from 'react'
+
+const AboutUs = React.createClass({
   render() {
     return (
       <div
@@ -26,9 +28,9 @@ AboutUs = React.createClass({
           />
         </div>
       </div>
-    );
+    )
   }
-});
+})
 
 AboutUs.Profile = React.createClass({
   propTypes: {
@@ -45,8 +47,8 @@ AboutUs.Profile = React.createClass({
         >
           {row}
         </div>
-      );
-    });
+      )
+    })
   },
 
   render() {
@@ -65,6 +67,8 @@ AboutUs.Profile = React.createClass({
           {this.renderDescriptions()}
         </div>
       </div>
-    );
+    )
   }
-});
+})
+
+export default AboutUs

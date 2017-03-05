@@ -1,5 +1,13 @@
 import React from 'react';
 import { Router, Route, Link, IndexRoute, browserHistory } from 'react-router';
+import AppLayout from 'AppLayout'
+import Home from 'Home'
+import Database from 'Database'
+import RestaurantTable from 'RestaurantTable'
+import BundleListTable from 'BundleListTable'
+import BundleTable from 'BundleTable'
+import AboutUs from 'AboutUs'
+import NotFound from 'NotFound'
 
 const App = React.createClass({
   render() {
@@ -7,9 +15,9 @@ const App = React.createClass({
       <AppLayout>
         {this.props.children}
       </AppLayout>
-    );
+    )
   }
-});
+})
 
 const Routes = React.createClass({
   render() {
@@ -51,14 +59,8 @@ const Routes = React.createClass({
           />
         </Route>
       </Router>
-    );
+    )
   }
-});
+})
 
-Meteor.startup(function() {
-  const root = document.createElement('div');
-  root.setAttribute('id', 'root');
-  document.body.appendChild(root);
-
-  ReactDOM.render(<Routes/>, root);
-});
+export default Routes

@@ -1,12 +1,13 @@
-import { Link, browserHistory } from 'react-router';
+import React from 'react'
+import { Link, browserHistory } from 'react-router'
 
-Header = React.createClass({
+const Header = React.createClass({
   handleClickTitle() {
-    browserHistory.push('/');
+    browserHistory.push('/')
   },
 
   render() {
-    const isFullscreen = this.props.currentPath === '/';
+    const isFullscreen = this.props.currentPath === '/'
 
     return (
       <div
@@ -64,9 +65,9 @@ Header = React.createClass({
           className='filler'
         />
       </div>
-    );
+    )
   }
-});
+})
 
 Header.Item = React.createClass({
   renderLinkOrFile() {
@@ -77,7 +78,7 @@ Header.Item = React.createClass({
         >
           {this.props.name}
         </Link>
-      );
+      )
     } else if (this.props.file) {
       return (
         <a
@@ -86,10 +87,10 @@ Header.Item = React.createClass({
         >
           {this.props.name}
         </a>
-      );
+      )
     }
 
-    return null;
+    return null
   },
 
   render() {
@@ -99,6 +100,8 @@ Header.Item = React.createClass({
       >
         {this.renderLinkOrFile()}
       </span>
-    );
+    )
   }
-});
+})
+
+export default Header

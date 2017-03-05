@@ -1,4 +1,6 @@
-Error = React.createClass({
+import React from 'react'
+
+const Error = React.createClass({
   propTypes: {
     message: React.PropTypes.string
   },
@@ -6,7 +8,7 @@ Error = React.createClass({
   getDefaultProps() {
     return {
       message: 'Some error occured during execution. Please refresh this page or check your URL.'
-    };
+    }
   },
 
   render() {
@@ -14,6 +16,8 @@ Error = React.createClass({
       <div>
         {this.props.message}
       </div>
-    );
+    )
   }
-});
+})
+
+export default Error

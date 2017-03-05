@@ -1,4 +1,6 @@
-Section = React.createClass({
+import React from 'react'
+
+const Section = React.createClass({
   propTypes: {
     name: React.PropTypes.string.isRequired,
     folded: React.PropTypes.bool
@@ -7,23 +9,23 @@ Section = React.createClass({
   getDefaultProps() {
     return {
       folded: false
-    };
+    }
   },
 
   getInitialState() {
     return {
       folded: this.props.folded
-    };
+    }
   },
 
   handleToggleCollapse() {
     this.setState({
       folded: !this.state.folded
-    });
+    })
   },
 
   renderArrow() {
-    const arrow = this.state.folded ? 'keyboard_arrow_right' : 'keyboard_arrow_down';
+    const arrow = this.state.folded ? 'keyboard_arrow_right' : 'keyboard_arrow_down'
 
     return (
       <i
@@ -31,7 +33,7 @@ Section = React.createClass({
       >
         {arrow}
       </i>
-    );
+    )
   },
 
   render() {
@@ -52,6 +54,8 @@ Section = React.createClass({
           {this.props.children}
         </div>
       </div>
-    );
+    )
   }
-});
+})
+
+export default Section

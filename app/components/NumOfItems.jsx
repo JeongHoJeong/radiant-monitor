@@ -1,4 +1,6 @@
-NumOfItems = React.createClass({
+import React from 'react'
+
+const NumOfItems = React.createClass({
   propTypes: {
     name: React.PropTypes.string.isRequired,
     numItems: React.PropTypes.number.isRequired
@@ -17,6 +19,8 @@ NumOfItems = React.createClass({
         </span>
         {` ${this.props.name}`}
       </span>
-    );
+    )
   }
-});
+})
+
+export default NumOfItems

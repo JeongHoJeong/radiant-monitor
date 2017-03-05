@@ -1,6 +1,10 @@
-import { browserHistory } from 'react-router';
+import React from 'react'
+import { browserHistory } from 'react-router'
+import InfoPanel from 'InfoPanel'
+import NumOfItems from 'NumOfItems'
+import Loader from 'Loader'
 
-RestaurantTable = React.createClass({
+const RestaurantTable = React.createClass({
   propTypes: {
     rows: React.PropTypes.array,
     numItems: React.PropTypes.number,
@@ -10,11 +14,11 @@ RestaurantTable = React.createClass({
   getDefaultProps() {
     return {
       isLoaded: false
-    };
+    }
   },
 
   handleClickRestaurant(id) {
-    browserHistory.push(`/database/restaurant/${id}`);
+    browserHistory.push(`/database/restaurant/${id}`)
   },
 
   renderRestaurants() {
@@ -40,8 +44,8 @@ RestaurantTable = React.createClass({
             </div>
           </div>
         </div>
-      );
-    });
+      )
+    })
   },
 
   render() {
@@ -61,6 +65,8 @@ RestaurantTable = React.createClass({
           </div>
         </div>
       ) :
-      <Loader />;
+      <Loader />
   }
-});
+})
+
+export default RestaurantTable

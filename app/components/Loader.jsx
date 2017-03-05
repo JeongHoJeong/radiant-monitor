@@ -1,4 +1,6 @@
-Loader = React.createClass({
+import React from 'react'
+
+const Loader = React.createClass({
   propTypes: {
     size: React.PropTypes.number,
     margin: React.PropTypes.number,
@@ -12,7 +14,7 @@ Loader = React.createClass({
       margin: 100,
       marginOnly: false,
       margin100vh: false
-    };
+    }
   },
 
   render() {
@@ -21,14 +23,14 @@ Loader = React.createClass({
       height: `${this.props.size}px`,
       marginTop: this.props.margin100vh ? '100vh' : `${this.props.margin}px`,
       marginBottom: this.props.margin100vh ? 0 : `${this.props.margin}px`
-    };
+    }
 
     if (this.props.marginOnly) {
       return (
         <div
           style={style}
         />
-      );
+      )
     }
 
     return (
@@ -49,6 +51,8 @@ Loader = React.createClass({
         <div className='sk-circle11 sk-circle' />
         <div className='sk-circle12 sk-circle' />
       </div>
-    );
+    )
   }
-});
+})
+
+export default Loader

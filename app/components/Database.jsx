@@ -1,15 +1,16 @@
+import React from 'react'
 import { browserHistory } from 'react-router';
 
-Database = React.createClass({
+const Database = React.createClass({
   getInitialState() {
     return {
       isLoaded: false,
       error: false
-    };
+    }
   },
 
   componentWillMount() {
-    var self = this;
+    var self = this
 
     Meteor.call('getRestaurants', 0, 100, true, (err, result) => {
       if (!err && result.payload && result.numItems) {
@@ -18,17 +19,17 @@ Database = React.createClass({
           numItems: result.numItems,
           isLoaded: true,
           error: false
-        });
+        })
       } else {
         self.setState({
           error: true
-        });
+        })
       }
-    });
+    })
   },
 
   handleClickRestaurant(id) {
-    browserHistory.push(`/database/restaurant/${id}`);
+    browserHistory.push(`/database/restaurant/${id}`)
   },
 
   renderRestaurants() {
@@ -50,8 +51,8 @@ Database = React.createClass({
             {row.displayName || row.name}
           </div>
         </div>
-      );
-    });
+      )
+    })
   },
 
   renderChildren() {
@@ -62,12 +63,12 @@ Database = React.createClass({
         numItems: this.state.numItems,
         isLoaded: this.state.isLoaded
       }
-    );
+    )
   },
 
   render() {
     if (this.state.error) {
-      return <Error />;
+      return <Error />
     }
 
     return this.state.isLoaded ?
@@ -80,6 +81,8 @@ Database = React.createClass({
           {this.renderChildren()}
         </div>
       ) :
-      <Loader />;
+      <Loader />
   }
-});
+})
+
+export default Database

@@ -1,4 +1,6 @@
-InfoPanel = React.createClass({
+import React from 'react'
+
+const InfoPanel = React.createClass({
   render() {
     return (
       <div
@@ -6,6 +8,8 @@ InfoPanel = React.createClass({
       >
         {this.props.children}
       </div>
-    );
+    )
   }
-});
+})
+
+export default InfoPanel

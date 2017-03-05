@@ -1,6 +1,11 @@
+import React from 'react'
 import { browserHistory } from 'react-router';
+import Util from 'clientUtil'
+import Section from 'Section'
+import NumOfItems from 'NumOfItems'
+import Loader from 'Loader'
 
-BundleTable = React.createClass({
+const BundleTable = React.createClass({
   propTypes: {
     onLoad: React.PropTypes.func
   },
@@ -9,77 +14,77 @@ BundleTable = React.createClass({
     return {
       isSamplesLoaded: false,
       error: false
-    };
+    }
   },
 
   componentWillMount() {
-    this.loadSamples(this.props.params.bundleId);
+    this.loadSamples(this.props.params.bundleId)
   },
 
   componentWillUpdate(nextProps) {
     if (nextProps.params.bundleId != this.props.params.bundleId) {
-      this.loadSamples(nextProps.params.bundleId);
+      this.loadSamples(nextProps.params.bundleId)
     }
   },
 
   computeStatistics(payload) {
-    let rows = payload ? payload : this.state.rows;
-    let aps = {};
+    let rows = payload ? payload : this.state.rows
+    let aps = {}
 
     rows.forEach((row) => {
       row.sample.forEach((sample) => {
-        const BSSID = sample.BSSID;
+        const BSSID = sample.BSSID
 
         if (!aps[BSSID]) {
-          aps[BSSID] = {};
-          aps[BSSID].SSID = sample.SSID;
-          aps[BSSID].sum = 0;
-          aps[BSSID].count = 0;
+          aps[BSSID] = {}
+          aps[BSSID].SSID = sample.SSID
+          aps[BSSID].sum = 0
+          aps[BSSID].count = 0
         }
 
-        aps[BSSID].count++;
-        aps[BSSID].sum += sample.level;
-      });
-    });
+        aps[BSSID].count++
+        aps[BSSID].sum += sample.level
+      })
+    })
 
-    let result = [];
+    let result = []
 
     Object.keys(aps).map((BSSID) => {
-      const ap = aps[BSSID];
+      const ap = aps[BSSID]
 
-      ap.BSSID = BSSID;
-      ap.averageLevel = (ap.sum / ap.count);
-      delete ap.sum;
+      ap.BSSID = BSSID
+      ap.averageLevel = (ap.sum / ap.count)
+      delete ap.sum
 
-      result.push(ap);
-    });
+      result.push(ap)
+    })
 
     result.sort((ap1, ap2) => {
-      return ap2.averageLevel - ap1.averageLevel;
-    });
+      return ap2.averageLevel - ap1.averageLevel
+    })
 
     this.setState({
       aps: result
-    });
+    })
   },
 
   loadSamples(bundleId) {
-    var self = this;
+    var self = this
 
     self.setState({
       isSamplesLoaded: false
-    });
+    })
 
     Meteor.call('getSamples', bundleId, 0, 100, true, (err, result) => {
       if (!err && result.payload && result.numItems && result.bundle) {
         result.payload = result.payload.map((row) => {
-          let result = row;
-          result.sample = JSON.parse(row.sample);
+          let result = row
+          result.sample = JSON.parse(row.sample)
 
-          return result;
-        });
+          return result
+        })
 
-        this.computeStatistics(result.payload);
+        this.computeStatistics(result.payload)
 
         self.setState({
           rows: result.payload,
@@ -87,23 +92,23 @@ BundleTable = React.createClass({
           bundle: result.bundle,
           isSamplesLoaded: true,
           error: false
-        });
+        })
 
         if (self.props.onLoad) {
-          self.props.onLoad();
+          self.props.onLoad()
         }
       } else {
         self.setState({
           error: true
-        });
+        })
       }
-    });
+    })
   },
 
   renderAPs(sample) {
     sample.sort((ap1, ap2) => {
-      return ap2.level - ap1.level;
-    });
+      return ap2.level - ap1.level
+    })
 
     return sample.map((ap, idx) => {
       return (
@@ -127,13 +132,13 @@ BundleTable = React.createClass({
             {ap.level}
           </span>
         </div>
-      );
-    });
+      )
+    })
   },
 
   renderSamples() {
     return this.state.rows.map((row, idx) => {
-      const apList = row.sample;
+      const apList = row.sample
 
       return (
         <div
@@ -158,13 +163,13 @@ BundleTable = React.createClass({
             {this.renderAPs(apList)}
           </div>
         </div>
-      );
-    });
+      )
+    })
   },
 
   render() {
     if (this.state.error) {
-      return <Error />;
+      return <Error />
     }
 
     return this.state.isSamplesLoaded ?
@@ -221,9 +226,9 @@ BundleTable = React.createClass({
       <Loader
         marginOnly={true}
         margin100vh={true}
-      />;
+      />
   }
-});
+})
 
 BundleTable.Statistics = React.createClass({
   propTypes: {
@@ -232,7 +237,7 @@ BundleTable.Statistics = React.createClass({
   },
 
   renderRows() {
-    var self = this;
+    var self = this
 
     return this.props.rows.map((row, idx) => {
       return (
@@ -268,8 +273,8 @@ BundleTable.Statistics = React.createClass({
             </span>
           </div>
         </div>
-      );
-    });
+      )
+    })
   },
 
   render() {
@@ -299,6 +304,8 @@ BundleTable.Statistics = React.createClass({
           {this.renderRows()}
         </div>
       </div>
-    );
+    )
   }
-});
+})
+
+export default BundleTable
