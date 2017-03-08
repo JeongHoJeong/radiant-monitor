@@ -82,7 +82,7 @@ const BundleTable = React.createClass({
       offset: 0,
       limit: 100
     }, (err, result) => {
-      if (!err && result.payload && result.totalCount && result.bundle) {
+      if (!err && result.payload && typeof result.totalCount === 'number' && result.bundle) {
         result.payload = result.payload.map((row) => {
           let result = row
           result.sample = JSON.parse(row.sample)

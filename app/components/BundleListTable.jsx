@@ -43,7 +43,7 @@ const BundleListTable = React.createClass({
       offset: 0,
       limit: 100
     }, (err, result) => {
-      if (!err && result.payload && result.totalCount && result.restaurantName) {
+      if (!err && result.payload && typeof result.totalCount === 'number' && result.restaurantName) {
         self.setState({
           rows: result.payload,
           numItems: result.totalCount,
