@@ -16,12 +16,36 @@ if (count($path) == 0) {
 
 $result = array();
 
-if (strcmp($path[0], 'restaurant') === 0) {
-  array_push($result, 'Restaurant!');
+if (strcmp($path[0], 'restaurants') === 0) {
+  if (!isset($_GET['offset'])) {
+    return_error_message('offset is not set.');
+  } else if (!isset($_GET['limit'])) {
+    return_error_message('limit is not set.');
+  }
+
+  DBManager::connect();
+
+  $result['payload'] = DBManager::query('SELECT * FROM Restaurant WHERE hidden=0 LIMIT ?, ?', [$_GET['offset'], $_GET['limit']]);
+  $result['totalCount'] = DBManager::query('SELECT COUNT(*) AS count FROM Restaurant WHERE hidden=0')[0]['count'];
+
+  DBManager::close();
+} else if (strcmp($path[0], 'restaurant') === 0) {
+  if (!isset($_GET['id'])) {
+    return_error_message('id is not set.');
+  }
+
+  DBManager::connect();
+  $restaurant = DBManager::query('SELECT * FROM Restaurant WHERE id = ?', [$_GET['id']]);
+  DBManager::close();
+
+  if (count($restaurant) === 0) {
+    return_error_message('There is no such restaurant.');
+  } else {
+    $result = $restaurant[0];
+  }
 } else {
-  return_error_message('Error!');
+  return_error_message('There is no matching API.');
 }
 
 header('Content-Type: application/json');
-
 echo json_encode($result);
