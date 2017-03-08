@@ -11,6 +11,7 @@ class DBManager {
       $db_connection_info->password,
       $db_connection_info->database
     );
+    self::$mysqli->set_charset('utf8');
   }
 
   public static function query($sql, $bind_params = null)
