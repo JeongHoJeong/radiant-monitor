@@ -4,7 +4,13 @@ class DBManager {
 
   public static function connect()
   {
-    self::$mysqli = new mysqli("localhost", "radiant", "radiant", "radiant");
+    $db_connection_info = json_decode(file_get_contents('../local/db.json'));
+    self::$mysqli = new mysqli(
+      $db_connection_info->host,
+      $db_connection_info->username,
+      $db_connection_info->password,
+      $db_connection_info->database
+    );
   }
 
   public static function query($sql, $bind_params = null)
