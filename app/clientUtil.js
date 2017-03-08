@@ -9,6 +9,10 @@ Util.makePadding = function (string, length) {
 }
 
 Util.dateFormat = function (date) {
+  if (typeof date === 'string') {
+    date = new Date(date)
+  }
+
   let yyyy = date.getFullYear().toString()
   let mm = Util.makePadding((date.getMonth() + 1).toString(), 2)
   let dd = Util.makePadding(date.getDate().toString(), 2)
@@ -20,12 +24,26 @@ Util.dateFormat = function (date) {
   return `${yyyy}/${mm}/${dd} ${HH}:${MM}:${SS}`
 }
 
-/*var map
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 8
-  })
-}*/
+Util.xhrGet = function (url, options, callback) {
+  url += '?' + Object.keys(options).map((key) => {
+    return `${key}=${options[key]}`
+  }).join('&')
+
+  const req = new XMLHttpRequest()
+
+  req.open('GET', url, true)
+
+  req.onreadystatechange = function () {
+    if (req.readyState == 4) {
+      if (req.status == 200) {
+        callback(null, JSON.parse(req.responseText))
+      } else {
+        callback(req.responseText, null)
+      }
+    }
+  }
+
+  req.send(null)
+}
 
 export default Util

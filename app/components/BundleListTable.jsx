@@ -3,6 +3,8 @@ import { browserHistory } from 'react-router';
 import InfoPanel from 'InfoPanel'
 import Loader from 'Loader'
 import NumOfItems from 'NumOfItems'
+import Util from 'clientUtil'
+import Error from 'Error'
 
 const BundleListTable = React.createClass({
   getInitialState() {
@@ -36,11 +38,15 @@ const BundleListTable = React.createClass({
       isLoaded: false
     })
 
-    Meteor.call('getBundles', restaurantId, 0, 100, true, (err, result) => {
-      if (!err && result.payload && result.numItems && result.restaurantName) {
+    Util.xhrGet('/api/bundles', {
+      id: restaurantId,
+      offset: 0,
+      limit: 100
+    }, (err, result) => {
+      if (!err && result.payload && result.totalCount && result.restaurantName) {
         self.setState({
           rows: result.payload,
-          numItems: result.numItems,
+          numItems: result.totalCount,
           isLoaded: true,
           restaurantName: result.restaurantName,
           error: false

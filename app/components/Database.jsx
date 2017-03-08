@@ -1,5 +1,9 @@
 import React from 'react'
 import { browserHistory } from 'react-router';
+import Util from 'clientUtil'
+import Loader from 'Loader'
+import Map from 'Map'
+import Error from 'Error'
 
 const Database = React.createClass({
   getInitialState() {
@@ -10,18 +14,19 @@ const Database = React.createClass({
   },
 
   componentWillMount() {
-    var self = this
-
-    Meteor.call('getRestaurants', 0, 100, true, (err, result) => {
-      if (!err && result.payload && result.numItems) {
-        self.setState({
+    Util.xhrGet('/api/restaurants', {
+      offset: 0,
+      limit: 100
+    }, (err, result) => {
+      if (!err && result.payload && result.totalCount) {
+        this.setState({
           rows: result.payload,
-          numItems: result.numItems,
+          numItems: result.totalCount,
           isLoaded: true,
           error: false
         })
       } else {
-        self.setState({
+        this.setState({
           error: true
         })
       }

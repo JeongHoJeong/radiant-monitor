@@ -4,6 +4,8 @@ import Util from 'clientUtil'
 import Section from 'Section'
 import NumOfItems from 'NumOfItems'
 import Loader from 'Loader'
+import Error from 'Error'
+import InfoPanel from 'InfoPanel'
 
 const BundleTable = React.createClass({
   propTypes: {
@@ -75,8 +77,12 @@ const BundleTable = React.createClass({
       isSamplesLoaded: false
     })
 
-    Meteor.call('getSamples', bundleId, 0, 100, true, (err, result) => {
-      if (!err && result.payload && result.numItems && result.bundle) {
+    Util.xhrGet('/api/samples', {
+      id: bundleId,
+      offset: 0,
+      limit: 100
+    }, (err, result) => {
+      if (!err && result.payload && result.totalCount && result.bundle) {
         result.payload = result.payload.map((row) => {
           let result = row
           result.sample = JSON.parse(row.sample)
@@ -88,7 +94,7 @@ const BundleTable = React.createClass({
 
         self.setState({
           rows: result.payload,
-          numItems: result.numItems,
+          numItems: result.totalCount,
           bundle: result.bundle,
           isSamplesLoaded: true,
           error: false
